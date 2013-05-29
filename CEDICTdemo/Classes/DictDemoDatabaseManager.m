@@ -105,6 +105,30 @@ static DictDemoDatabaseManager *dbmanager = nil;
     
 }
 
+// [lu:4 hua4] = lǜ huà
+- (NSString*)transferPinyinTonesFrom:(NSString*)originalPinyin
+{
+    if (originalPinyin.length == 0) return @"";
+    
+    NSArray* a = @[@"ā",@"á",@"ǎ",@"à",@"a"];
+    NSArray* e = @[@"ē",@"é",@"ě",@"è",@"e"];
+    NSArray* i = @[@"ī",@"í",@"ǐ",@"ì",@"i"];
+    NSArray* o = @[@"ō",@"ó",@"ǒ",@"ò",@"o"];
+    NSArray* u = @[@"ū",@"ú",@"ǔ",@"ù",@"u"];
+    NSArray* v = @[@"ǖ",@"ǘ",@"ǚ",@"ǜ",@"ü"];
+    
+    NSMutableString *result;
+    
+    originalPinyin = [originalPinyin stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"[]"]];
+    NSArray *words = [originalPinyin componentsSeparatedByString:@" "];
+    for (NSString *word in words)
+    {
+        
+    }
+    
+    return result;
+}
+
 - (NSArray*)selectWordWithPrefix:(NSString*)prefix
 {
     NSString * query = [NSString stringWithFormat:@"SELECT * FROM cedict WHERE simplified LIKE \"%@%@\" ORDER BY id", prefix,@"%"];
