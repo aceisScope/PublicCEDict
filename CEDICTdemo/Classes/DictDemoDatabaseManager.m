@@ -208,4 +208,59 @@ static DictDemoDatabaseManager *dbmanager = nil;
 
 }
 
+// handle sentence segmentation with RMM
+- (NSArray*)segmentSentence:(NSString*)sentence withMaxWordlength:(NSInteger)max
+{
+    NSMutableArray *result = [NSMutableArray array];
+    
+    NSInteger n = sentence.length;
+    
+    int i = n;
+    while (i>0)
+    {
+        NSString *subsentence = [sentence substringWithRange:NSMakeRange(i-max, max)];
+        if ([self selectWordExactlyMatch:subsentence] != nil)  //the subsentence is a valid word segment
+        {
+            [result addObject:subsentence];
+            i = i - max;
+        }
+        else //the subsentence is NOT a valid word segment
+        {
+            int j = 0;
+            for(j=1; j<max; j++)
+            {
+                NSString * sub_subsentence = [subsentence substringWithRange:NSMakeRange(subsentence.length - max + j, max - j)];
+                if ([self selectWordExactlyMatch:sub_subsentence] != nil)
+                {
+                    [result addObject:sub_subsentence];
+                    break;
+                }
+            }
+            
+            i = i - max + j;
+        }
+        
+    }
+    
+    return result;
+}
+
+#pragma mark- private method
+// select exact word from dictionary
+- (NSDictionary*)selectWordExactlyMatch:(NSString*)word
+{
+    NSString * query = [NSString stringWithFormat:@"SELECT * FROM cedict WHERE simplified = \"%@\" ", word];
+    FMResultSet * words = [self.db executeQuery:query];
+    while ([words next])
+    {
+        return  @{
+                  @"simplified": [words stringForColumn:@"simplified"],
+                  @"traditional":[words stringForColumn:@"traditional"],
+                  @"pinyin":[words stringForColumn:@"pinyin"],
+                  @"english":[words stringForColumn:@"english"]
+                  } ;
+    }
+    return nil;
+}
+
 @end

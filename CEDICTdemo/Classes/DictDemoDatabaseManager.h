@@ -23,6 +23,13 @@
  */
 - (NSString*)transferPinyinSyllable:(NSString*)originalPinyin;
 
+/*!
+ to divide a sentence into segments using Reverse Max Match method.
+ @param sentence: the sentence for segmenting
+        max: max word length. could be 4 for Chinese. 
+ */
+- (NSArray*)segmentSentence:(NSString*)sentence withMaxWordlength:(NSInteger)max;
+
 //this is the method for generating a database file from the given cedict text
 - (void)insertAllCEDICTitemsIntoDB;
 
