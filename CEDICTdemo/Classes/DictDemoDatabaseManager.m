@@ -221,19 +221,29 @@ static DictDemoDatabaseManager *dbmanager = nil;
         NSString *subsentence = [sentence substringWithRange:NSMakeRange(i-max, max)];
         if ([self selectWordExactlyMatch:subsentence] != nil)  //the subsentence is a valid word segment
         {
-            [result addObject:subsentence];
+            [result insertObject:subsentence atIndex:0];
             i = i - max;
         }
         else //the subsentence is NOT a valid word segment
         {
             int j = 0;
+            NSString * sub_subsentence;
+            
             for(j=1; j<max; j++)
             {
-                NSString * sub_subsentence = [subsentence substringWithRange:NSMakeRange(subsentence.length - max + j, max - j)];
+                sub_subsentence = [subsentence substringWithRange:NSMakeRange(subsentence.length - max + j, max - j)];
                 if ([self selectWordExactlyMatch:sub_subsentence] != nil)
                 {
-                    [result addObject:sub_subsentence];
+                    [result insertObject:sub_subsentence atIndex:0];
                     break;
+                }
+                else
+                {
+                    if (j == max - 1) //the subsentence doesn't exist in the dictionary
+                    {
+                        [result insertObject:sub_subsentence atIndex:0];
+                        break;
+                    }
                 }
             }
             

@@ -47,7 +47,7 @@
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     
-    NSLog(@"%@",[[DictDemoDatabaseManager sharedDataManager] segmentSentence:@"我是一只熊猫宝宝" withMaxWordlength:4]);
+    NSLog(@"%@",[[DictDemoDatabaseManager sharedDataManager] segmentSentence:@"中关村E世界数码广场A839写字间" withMaxWordlength:4]);
     
 }
 
