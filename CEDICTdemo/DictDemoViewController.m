@@ -95,7 +95,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    [cell.textLabel setText:[NSString stringWithFormat:@"%@ [%@]",self.matchWords[indexPath.row][@"simplified"],self.matchWords[indexPath.row][@"pinyin"]]];
+    [cell.textLabel setText:[NSString stringWithFormat:@"%@ %@",self.matchWords[indexPath.row][@"simplified"],[[DictDemoDatabaseManager sharedDataManager] transferPinyinSyllable:self.matchWords[indexPath.row][@"pinyin"]]]];
     
     return cell;
 }

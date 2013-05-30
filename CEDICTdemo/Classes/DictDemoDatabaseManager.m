@@ -105,10 +105,11 @@ static DictDemoDatabaseManager *dbmanager = nil;
     
 }
 
-// [lu:4 hua4] = lǜ huà
-- (NSString*)transferPinyinTonesFrom:(NSString*)originalPinyin
+// [lu:4 hua4] -> lǜ huà
+// [lu:e4] => lüè
+- (NSString*)transferPinyinSyllable:(NSString*)originalPinyin
 {
-    if (originalPinyin.length == 0) return @"";
+    if (originalPinyin.length == 0 || originalPinyin == nil) return @"";
     
     NSArray* a = @[@"ā",@"á",@"ǎ",@"à",@"a"];
     NSArray* e = @[@"ē",@"é",@"ě",@"è",@"e"];
@@ -117,18 +118,77 @@ static DictDemoDatabaseManager *dbmanager = nil;
     NSArray* u = @[@"ū",@"ú",@"ǔ",@"ù",@"u"];
     NSArray* v = @[@"ǖ",@"ǘ",@"ǚ",@"ǜ",@"ü"];
     
-    NSMutableString *result;
+    NSMutableString *result = [NSMutableString string];
     
-    originalPinyin = [originalPinyin stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"[]"]];
-    NSArray *words = [originalPinyin componentsSeparatedByString:@" "];
-    for (NSString *word in words)
+    NSArray *pinyins = [originalPinyin componentsSeparatedByString:@" "];
+    for (NSString *pinyin in pinyins)
     {
+        NSString *newpinyin;
+        NSString *tone = [pinyin substringFromIndex:pinyin.length-1];
         
+        newpinyin = [pinyin substringToIndex:pinyin.length - 1];
+        if([tone integerValue] >= 1 && [tone integerValue] <= 5) //means it's a valid tone
+        {
+            if ([pinyin rangeOfString:@"a"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"a" withString:a[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"e"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"e" withString:e[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"ou"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"o" withString:o[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"io"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"o" withString:o[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"iu"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"u" withString:u[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"ui"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"i" withString:i[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"uo"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"o" withString:o[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"i"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"i" withString:i[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"o"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"o" withString:o[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"u:"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"u:" withString:v[tone.integerValue-1]];
+            }
+            else if ([pinyin rangeOfString:@"u"].location != NSNotFound)
+            {
+                newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"u" withString:u[tone.integerValue-1]];
+            }
+        
+        }
+        
+        if ([newpinyin rangeOfString:@"u:"].location != NSNotFound) {
+            newpinyin = [newpinyin stringByReplacingOccurrencesOfString:@"u:" withString:@"ü"];
+        }
+        
+        [result appendString:newpinyin];
+        [result appendString:@" "];
     }
     
-    return result;
+    return [result substringToIndex:result.length-1];
 }
 
+
+// select words start with prefix. eg: 中->中国,中心,中央,ect
 - (NSArray*)selectWordWithPrefix:(NSString*)prefix
 {
     NSString * query = [NSString stringWithFormat:@"SELECT * FROM cedict WHERE simplified LIKE \"%@%@\" ORDER BY id", prefix,@"%"];

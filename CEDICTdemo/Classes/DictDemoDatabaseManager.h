@@ -18,7 +18,13 @@
 
 - (NSArray*)selectWordWithPrefix:(NSString*)prefix;
 
+/*!
+ to transfer a syllable pinyin tone to unicode, eg: zhong1 guo2 -> zhōng guó
+ */
+- (NSString*)transferPinyinSyllable:(NSString*)originalPinyin;
+
 //this is the method for generating a database file from the given cedict text
 - (void)insertAllCEDICTitemsIntoDB;
+
 
 @end
