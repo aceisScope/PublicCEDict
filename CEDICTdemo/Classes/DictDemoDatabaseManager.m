@@ -46,7 +46,7 @@ static DictDemoDatabaseManager *dbmanager = nil;
     
         if (!isExist)
         {                
-            [self.db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cedict (id INTEGER PRIMARY KEY , simplified TEXT COLLATE nocase, traditional TEXT COLLATE nocase, pinyin TEXT COLLATE nocase , english TEXT COLLATE nocase, UNIQUE  ('simplified' ASC) ON CONFLICT REPLACE )"]];
+            [self.db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cedict (id INTEGER PRIMARY KEY , simplified TEXT COLLATE nocase, traditional TEXT COLLATE nocase, pinyin TEXT COLLATE nocase , english TEXT COLLATE nocase)"]];
             
             // create indexs
             [self.db executeUpdate:[NSString stringWithFormat:@"CREATE INDEX index_simplified ON cedict (simplified ASC)"]];
