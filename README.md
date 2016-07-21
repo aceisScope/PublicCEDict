@@ -8,7 +8,6 @@ The dictionary it bases on is the same (or almost the same) as Pleco.
 
 ## Description ##
 
-The idea is originally inspired by [shenmeci](http://shenmeci.rodolfocarvalho.net) of my friend [Rodolfo Henrique Carvalho](https://github.com/rhcarvalho), which is a very cute online Chinese-English dictionary providing rich pinyin information and written in GoLang. 
 The dictionary resource is the Creative Commons licensed Chinese-English dictionary [CC-CEDICT](http://www.mdbg.net/chindict/chindict.php?page=cedict).
 When creating/querying the database of CEDICT, I use the brilliant [FMDB](https://github.com/ccgus/fmdb) of August Mueller and [LineReader](https://github.com/johnjohndoe/LineReader) of Tobias Preuss which is originally written by [Dave DeLong](https://github.com/davedelong).
 
